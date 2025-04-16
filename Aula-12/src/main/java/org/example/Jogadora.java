@@ -4,17 +4,17 @@ public class Jogadora {
     private String nome;
     private int idade;
     private String posicao;
-    private int numero;
+    private int numeroCamisa;
 
-    public Jogadora(String nome, int idade, String posicao, int numero) {
+    public Jogadora(String nome, int idade, String posicao, int numeroCamisa) {
         this.nome = nome;
         this.idade = idade;
         this.posicao = posicao;
-        this.numero = numero;
+        this.numeroCamisa = numeroCamisa;
     }
 
     @Override
     public String toString() {
-        return nome + " (" + idade + " anos, " + posicao + ", camisa " + numero + ")";
+        return nome + " - " + posicao + " (Camisa " + numeroCamisa + ")";
     }
 }

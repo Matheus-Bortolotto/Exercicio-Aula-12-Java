@@ -1,57 +1,50 @@
 package org.example;
 
-import java.time.LocalDate;
-
 public class Main {
     public static void main(String[] args) {
+        // === Desafio 1: Campeonato de Futebol Feminino ===
+        System.out.println("=== Campeonato de Futebol Feminino ===");
+        OperacoesCampeonato campeonato = new Campeonato();
 
-        // ===============================
-        // DESAFIO 1 - CAMPEONATO DE FUTEBOL FEMININO
-        // ===============================
-        System.out.println("===== CAMPEONATO DE FUTEBOL =====");
-        Campeonato campeonato = new Campeonato();
+        // Cadastro de times
+        campeonato.cadastrarTime("Corinthians", "São Paulo");
+        campeonato.cadastrarTime("Cruzeiro", "Belo Horizonte");
 
-        Time corinthians = new Time("Corinthians", "São Paulo");
-        corinthians.adicionarJogadora(new Jogadora("Maria", 24, "Atacante", 9));
-        corinthians.adicionarJogadora(new Jogadora("Ana", 22, "Meio-campo", 10));
+        // Cadastro de jogadoras
+        Jogadora jogadora1 = new Jogadora("Maria", 22, "Atacante", 10);
+        Jogadora jogadora2 = new Jogadora("Ana", 21, "Meio-campo", 8);
 
-        Time palmeiras = new Time("Palmeiras", "São Paulo");
-        palmeiras.adicionarJogadora(new Jogadora("Luiza", 23, "Zagueira", 3));
-        palmeiras.adicionarJogadora(new Jogadora("Clara", 21, "Goleira", 1));
+        campeonato.adicionarJogadora("Corinthians", jogadora1);
+        campeonato.adicionarJogadora("Cruzeiro", jogadora2);
 
-        campeonato.cadastrarTime(corinthians);
-        campeonato.cadastrarTime(palmeiras);
+        // Registro de partidas
+        campeonato.registrarPartida("Corinthians", "Cruzeiro", 3, 1);
 
-        campeonato.registrarPartida("Corinthians", "Palmeiras", 2, 1);
+        // Exibição da classificação
         campeonato.mostrarClassificacao();
 
+        // === Desafio 2: Cadastro e Acompanhamento de Pessoas com Necessidades Especiais ===
+        System.out.println("\n=== Cadastro e Acompanhamento de Pessoas com Necessidades Especiais ===");
+        OperacoesSaude saude = new SistemaSaude();
 
-        // ===============================
-        // DESAFIO 2 - SISTEMA DE SAÚDE
-        // ===============================
-        System.out.println("\n===== SISTEMA DE SAÚDE =====");
-        SistemaSaude sistemaSaude = new SistemaSaude();
+        // Cadastro de pessoa e atendimento
+        saude.cadastrarPessoa("João", "Visual", "Leve", "Rua A");
+        saude.registrarAtendimento("João", "Consulta com oftalmologista");
 
-        Pessoa joao = new Pessoa("João", 30, "Visual", "Moderado", "Rua A, 123");
-        sistemaSaude.cadastrarPessoa(joao);
+        // Geração de relatório
+        saude.gerarRelatorio("João");
 
-        Atendimento at1 = new Atendimento(LocalDate.of(2025, 4, 10), "Consulta", "Dra. Fernanda");
-        Atendimento at2 = new Atendimento(LocalDate.of(2025, 4, 15), "Fisioterapia", "Dr. Pedro");
-
-        sistemaSaude.registrarAtendimento("João", at1);
-        sistemaSaude.registrarAtendimento("João", at2);
-
-        sistemaSaude.gerarRelatorio("João");
-
-
-        // ===============================
-        // DESAFIO 3 - CONTROLE DE PEDÁGIO
-        // ===============================
-        System.out.println("\n===== CONTROLE DE PEDÁGIO SIMPLIFICADO =====");
+        // === Desafio 3: Sistema de Controle de Pedágios ===
+        System.out.println("\n=== Controle de Pedágio ===");
         OperacoesPedagio pedagio = new ControleDePedagio();
 
-        pedagio.registrarVeiculo("DEF-1234", "Caminhao", 5);
-        pedagio.calcularValor();
+        // Registro de veículo
+        pedagio.registrarVeiculo("XYZ1234", "caminhao", 6);
+
+        // Cálculo do valor do pedágio
+        pedagio.calcularValor("XYZ1234");
+
+        // Exibição do relatório de veículos
         pedagio.emitirRelatorio();
     }
 }

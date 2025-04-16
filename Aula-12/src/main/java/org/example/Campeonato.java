@@ -1,33 +1,49 @@
 package org.example;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Campeonato implements OperacoesCampeonato {
-    private Map<String, Time> times = new HashMap<>();
-    private Map<String, Integer> pontos = new HashMap<>();
+    private List<Time> times = new ArrayList<>();
 
     @Override
-    public void cadastrarTime(Time time) {
-        times.put(time.getNome(), time);
-        pontos.put(time.getNome(), 0);
-        System.out.println("Time cadastrado: " + time.getNome() + " - " + time.getCidade());
+    public void cadastrarTime(String nome, String cidade) {
+        times.add(new Time(nome, cidade));
+        System.out.println("Time cadastrado: " + nome + " (" + cidade + ")");
+    }
+
+    @Override
+    public void adicionarJogadora(String nomeTime, Jogadora jogadora) {
+        for (Time t : times) {
+            if (t.getNome().equalsIgnoreCase(nomeTime)) {
+                t.adicionarJogadora(jogadora);
+                System.out.println("Jogadora " + jogadora + " adicionada ao time " + nomeTime);
+                return;
+            }
+        }
+        System.out.println("Time não encontrado: " + nomeTime);
     }
 
     @Override
     public void registrarPartida(String timeA, String timeB, int golsA, int golsB) {
-        if (!times.containsKey(timeA) || !times.containsKey(timeB)) {
-            System.out.println("Um dos times não está cadastrado.");
+        Time t1 = null, t2 = null;
+        for (Time t : times) {
+            if (t.getNome().equalsIgnoreCase(timeA)) t1 = t;
+            if (t.getNome().equalsIgnoreCase(timeB)) t2 = t;
+        }
+
+        if (t1 == null || t2 == null) {
+            System.out.println("Um dos times não foi encontrado.");
             return;
         }
 
         if (golsA > golsB) {
-            pontos.put(timeA, pontos.get(timeA) + 3);
+            t1.adicionarPontos(3);
         } else if (golsB > golsA) {
-            pontos.put(timeB, pontos.get(timeB) + 3);
+            t2.adicionarPontos(3);
         } else {
-            pontos.put(timeA, pontos.get(timeA) + 1);
-            pontos.put(timeB, pontos.get(timeB) + 1);
+            t1.adicionarPontos(1);
+            t2.adicionarPontos(1);
         }
 
         System.out.println("Partida registrada: " + timeA + " " + golsA + " x " + golsB + " " + timeB);
@@ -36,8 +52,8 @@ public class Campeonato implements OperacoesCampeonato {
     @Override
     public void mostrarClassificacao() {
         System.out.println("Classificação:");
-        pontos.entrySet().stream()
-                .sorted((a, b) -> b.getValue().compareTo(a.getValue()))
-                .forEach(entry -> System.out.println(entry.getKey() + ": " + entry.getValue() + " pts"));
+        times.stream()
+                .sorted((a, b) -> b.getPontos() - a.getPontos())
+                .forEach(t -> System.out.println(t.getNome() + ": " + t.getPontos() + " pts"));
     }
 }

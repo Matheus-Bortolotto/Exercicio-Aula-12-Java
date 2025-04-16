@@ -1,5 +1,6 @@
 package org.example;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -7,17 +8,19 @@ public class SistemaSaude implements OperacoesSaude {
     private Map<String, Pessoa> pessoas = new HashMap<>();
 
     @Override
-    public void cadastrarPessoa(Pessoa pessoa) {
-        pessoas.put(pessoa.getNome(), pessoa);
-        System.out.println("Pessoa cadastrada: " + pessoa);
+    public void cadastrarPessoa(String nome, String tipoDeficiencia, String grau, String endereco) {
+        Pessoa pessoa = new Pessoa(nome, tipoDeficiencia, grau, endereco);
+        pessoas.put(nome, pessoa);
+        System.out.println("Pessoa cadastrada: " + nome);
     }
 
     @Override
-    public void registrarAtendimento(String nomePessoa, Atendimento atendimento) {
-        Pessoa p = pessoas.get(nomePessoa);
-        if (p != null) {
-            p.adicionarAtendimento(atendimento);
-            System.out.println("Atendimento registrado para " + nomePessoa);
+    public void registrarAtendimento(String nomePessoa, String tipoAtendimento) {
+        Pessoa pessoa = pessoas.get(nomePessoa);
+        if (pessoa != null) {
+            Atendimento atendimento = new Atendimento(LocalDate.now(), tipoAtendimento, "Profissional de saúde");
+            pessoa.adicionarAtendimento(atendimento);
+            System.out.println("Atendimento registrado para " + nomePessoa + ": " + tipoAtendimento);
         } else {
             System.out.println("Pessoa não encontrada.");
         }
@@ -25,11 +28,15 @@ public class SistemaSaude implements OperacoesSaude {
 
     @Override
     public void gerarRelatorio(String nomePessoa) {
-        Pessoa p = pessoas.get(nomePessoa);
-        if (p != null) {
-            System.out.println("Relatório de " + p.getNome());
-            for (Atendimento a : p.getAtendimentos()) {
-                System.out.println("- " + a);
+        Pessoa pessoa = pessoas.get(nomePessoa);
+        if (pessoa != null) {
+            System.out.println("Relatório de " + nomePessoa);
+            System.out.println("Deficiência: " + pessoa.getTipoDeficiencia());
+            System.out.println("Grau: " + pessoa.getGrau());
+            System.out.println("Endereço: " + pessoa.getEndereco());
+            System.out.println("Atendimentos:");
+            for (Atendimento atendimento : pessoa.getAtendimentos()) {
+                System.out.println(atendimento);
             }
         } else {
             System.out.println("Pessoa não encontrada.");

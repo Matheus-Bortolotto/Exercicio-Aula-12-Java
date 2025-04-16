@@ -1,25 +1,29 @@
 package org.example;
 
-public class ControleDePedagio implements OperacoesPedagio {
-    private String localizacao = "Rodovia SP-280 - Km 50";
-    private double tarifaBase = 10.0;
+import java.util.HashMap;
+import java.util.Map;
 
-    private String placa;
-    private String tipo;
-    private int eixos;
-    private double valorCobrado;
+public class ControleDePedagio implements OperacoesPedagio {
+    private Map<String, Veiculo> veiculos = new HashMap<>();
+    private double tarifaBase = 10.0;
 
     @Override
     public void registrarVeiculo(String placa, String tipo, int eixos) {
-        this.placa = placa;
-        this.tipo = tipo;
-        this.eixos = eixos;
+        Veiculo veiculo = new Veiculo(placa, tipo, eixos);
+        veiculos.put(placa, veiculo);
         System.out.println("Veículo registrado: " + placa + " - " + tipo);
     }
 
     @Override
-    public void calcularValor() {
-        switch (tipo.toLowerCase()) {
+    public void calcularValor(String placa) {
+        Veiculo veiculo = veiculos.get(placa);
+        if (veiculo == null) {
+            System.out.println("Veículo não encontrado.");
+            return;
+        }
+
+        double valorCobrado = 0.0;
+        switch (veiculo.getTipo().toLowerCase()) {
             case "carro":
                 valorCobrado = tarifaBase;
                 break;
@@ -27,20 +31,22 @@ public class ControleDePedagio implements OperacoesPedagio {
                 valorCobrado = tarifaBase * 0.5;
                 break;
             case "caminhao":
-                valorCobrado = tarifaBase * eixos;
+                valorCobrado = tarifaBase * veiculo.getEixos();
                 break;
             default:
-                valorCobrado = 0.0;
+                System.out.println("Tipo de veículo inválido.");
+                return;
         }
 
-        System.out.println("Valor cobrado: R$" + valorCobrado);
+        System.out.println("Valor cobrado para " + placa + ": R$" + valorCobrado);
     }
 
     @Override
     public void emitirRelatorio() {
         System.out.println("Relatório de Pedágio:");
-        System.out.println("Localização: " + localizacao);
-        System.out.println("Veículo: " + placa + " - " + tipo);
-        System.out.println("Valor cobrado: R$" + valorCobrado);
+        for (Map.Entry<String, Veiculo> entry : veiculos.entrySet()) {
+            Veiculo veiculo = entry.getValue();
+            System.out.println("Veículo: " + veiculo.getPlaca() + " | Tipo: " + veiculo.getTipo() + " | Eixos: " + veiculo.getEixos());
+        }
     }
 }
